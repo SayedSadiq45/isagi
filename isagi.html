@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blue Lock — Isagi Awakening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Russo+One&family=Bebas+Neue&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; background:#020409; overflow:hidden; }
+  .hero { position:relative; width:100vw; height:100vh; overflow:hidden; cursor:none; }
+  .hero::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:4px; z-index:20;
+    background:linear-gradient(90deg, transparent, #1E6FF2, #041C4A, #1E6FF2, transparent);
+  }
+  .hero-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0; }
+  .content { position:absolute; inset:0; z-index:10; pointer-events:none; }
+
+  .logo {
+    position:absolute; top:34px; left:50%; transform:translateX(-50%); z-index:15;
+    text-align:center; pointer-events:none;
+  }
+  .logo .op {
+    font-family:'Russo One', sans-serif; font-size:56px; line-height:0.9;
+    letter-spacing:0.04em; text-transform:uppercase;
+    color:#EAF2FF; font-style:italic; transform:skewX(-6deg); display:inline-block;
+    -webkit-text-stroke:1.5px #041C4A;
+    text-shadow:
+      0 3px 0 #0B3EA6,
+      0 5px 0 #041C4A,
+      0 0 30px rgba(30,111,242,0.6);
+  }
+  .logo .tag {
+    margin-top:2px; font-family:'Bebas Neue',sans-serif; font-size:15px;
+    letter-spacing:0.5em; color:#9fc2ff; text-shadow:0 0 8px rgba(0,0,0,0.8);
+    padding-left:0.5em;
+  }
+
+  .left {
+    position:absolute; bottom:64px; left:64px; width:360px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .right {
+    position:absolute; top:54%; right:64px; transform:translateY(-50%);
+    width:380px; text-align:right; display:flex; flex-direction:column; gap:14px; align-items:flex-end;
+  }
+  .eyebrow {
+    font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:0.35em;
+    text-transform:uppercase; color:#1E6FF2; padding-left:1.4rem; position:relative;
+  }
+  .eyebrow::before {
+    content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+    width:1rem; height:1.5px; background:#1E6FF2;
+  }
+  .right .eyebrow { color:#7de0ff; padding:0 1.4rem 0 0; }
+  .right .eyebrow::before { left:auto; right:0; background:#7de0ff; }
+
+  .title {
+    font-family:'Anton', sans-serif; font-size:74px; line-height:0.92; color:#fff;
+    text-transform:uppercase; letter-spacing:0.01em;
+    text-shadow:3px 3px 0 #0B3EA6, 0 0 14px rgba(30,111,242,0.55), 0 0 36px rgba(30,111,242,0.3);
+  }
+  .right .title {
+    font-size:58px; color:#fff;
+    text-shadow:3px 3px 0 #063d63, 0 0 16px rgba(125,224,255,0.5), 0 0 40px rgba(125,224,255,0.3);
+  }
+  .desc {
+    font-family:'Oswald',sans-serif; font-weight:300; font-style:normal; font-size:18px;
+    line-height:1.6; color:rgba(255,255,255,0.82);
+  }
+  .btn {
+    font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:0.2em; text-transform:uppercase;
+    padding:14px 28px; background:transparent; color:#fff; border:2px solid #1E6FF2;
+    cursor:pointer; align-self:flex-start; position:relative; overflow:hidden; isolation:isolate;
+    clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); pointer-events:all;
+    transition:border-color .3s, color .3s;
+  }
+  .btn::after {
+    content:''; position:absolute; inset:0; background:#1E6FF2;
+    transform:translateX(-105%) skewX(-8deg); transition:transform .38s cubic-bezier(.4,0,.2,1); z-index:-1;
+  }
+  .btn:hover { border-color:#7de0ff; color:#020409; }
+  .btn:hover::after { transform:translateX(0) skewX(-8deg); }
+
+  .hint {
+    position:absolute; left:50%; bottom:24px; transform:translateX(-50%); z-index:16;
+    font-family:'Bebas Neue',sans-serif; letter-spacing:0.25em; font-size:14px; color:#fff;
+    background:rgba(0,0,0,0.45); padding:8px 18px; border-radius:999px; pointer-events:none;
+    transition:opacity .5s;
+  }
+  @media (max-width:680px){
+    .logo .op{font-size:36px;} .logo .tag{font-size:11px; letter-spacing:0.3em;}
+    .left{left:22px; bottom:34px; width:62%;} .right{right:22px; width:58%;}
+    .title{font-size:40px;} .right .title{font-size:32px;} .desc{font-size:14px;}
+    .btn{font-size:14px; padding:11px 18px;}
+  }
+</style>
+</head>
+<body>
+<div class="hero" id="hero">
+  <canvas class="hero-canvas" id="cv"></canvas>
+
+  <div class="logo">
+    <div class="op">Blue Lock</div>
+    <div class="tag">DIRECT&nbsp;&nbsp;/ &nbsp;&middot;&nbsp; AWAKENING</div>
+  </div>
+
+  <div class="content">
+    <div class="left">
+      <span class="eyebrow">Blue Lock Prospect</span>
+      <h1 class="title">ISAGI<br>YOICHI</h1>
+      <p class="desc">A striker who devours every field he steps on. He doesn't just play the game &mdash; he rewrites it, imaging the whole pitch and turning every teammate's ego into his own weapon.</p>
+      <button class="btn">Enter the Lock</button>
+    </div>
+    <div class="right">
+      <span class="eyebrow">Ego Awakened</span>
+      <h1 class="title">DIRECT<br>EGO</h1>
+      <p class="desc">Field vision sharpens into a single, ravenous instinct. Every rival's strength becomes a tool, every goal becomes inevitable &mdash; the mind of the world's greatest striker.</p>
+    </div>
+  </div>
+
+  <div class="hint" id="hint">&#9656; MOVE ACROSS TO AWAKEN DIRECT &#9666;</div>
+</div>
+
+<script>
+(function(){
+  const hero=document.getElementById('hero');
+  const canvas=document.getElementById('cv');
+  const ctx=canvas.getContext('2d');
+  const hint=document.getElementById('hint');
+  const DPR=Math.min(window.devicePixelRatio||1,2);
+
+  const TRAIL_LENGTH=60;
+  let HEAD_RADIUS=190;
+  const OVERLAY='rgba(0,0,0,0.42)';
+
+  const mouse={x:-9999,y:-9999};
+  const smooth={x:-9999,y:-9999};
+  let trail=[];
+
+  const bottom=new Image();
+  const top=new Image();
+  // Replace these with your own Isagi / Blue Lock artwork.
+  // bottom = the "before" / calm image, top = the "awakened" / Direct image revealed under the cursor.
+  bottom.src = "./1.jpg"
+  top.src = "./2.png";
+  const off=document.createElement('canvas');
+  const offc=off.getContext('2d');
+
+  function cover(img,cw,ch){
+    const ir=img.width/img.height, cr=cw/ch;
+    let w,h,x,y;
+    if(ir>cr){ h=ch; w=ch*ir; x=(cw-w)/2; y=0; }
+    else { w=cw; h=cw/ir; x=0; y=(ch-h)/2; }
+    return [x,y,w,h];
+  }
+
+  function resize(){
+    const w=hero.offsetWidth,h=hero.offsetHeight;
+    canvas.width=w*DPR; canvas.height=h*DPR;
+    off.width=w*DPR; off.height=h*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    offc.setTransform(DPR,0,0,DPR,0,0);
+    HEAD_RADIUS=Math.max(130,Math.min(w,h)*0.24);
+  }
+  resize();
+  window.addEventListener('resize',resize);
+
+  hero.addEventListener('mousemove',function(e){
+    const r=hero.getBoundingClientRect();
+    mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;
+    hint.style.opacity=0;
+  });
+  hero.addEventListener('touchmove',function(e){
+    const r=hero.getBoundingClientRect(); const t=e.touches[0];
+    mouse.x=t.clientX-r.left; mouse.y=t.clientY-r.top;
+    hint.style.opacity=0;
+  },{passive:true});
+
+  function draw(){
+    const w=hero.offsetWidth,h=hero.offsetHeight;
+    smooth.x+=(mouse.x-smooth.x)*0.13;
+    smooth.y+=(mouse.y-smooth.y)*0.13;
+
+    trail.unshift({x:smooth.x,y:smooth.y});
+    if(trail.length>TRAIL_LENGTH) trail.length=TRAIL_LENGTH;
+
+    ctx.clearRect(0,0,w,h);
+    const cb=cover(bottom,w,h);
+    ctx.drawImage(bottom,cb[0],cb[1],cb[2],cb[3]);
+    ctx.fillStyle=OVERLAY;
+    ctx.fillRect(0,0,w,h);
+
+    offc.clearRect(0,0,w,h);
+    offc.globalCompositeOperation='source-over';
+    for(let i=0;i<trail.length;i++){
+      const t=1-i/trail.length;
+      const r=HEAD_RADIUS*(0.25+0.75*t);
+      const alpha=Math.pow(t,1.5);
+      offc.beginPath();
+      offc.arc(trail[i].x,trail[i].y,r,0,Math.PI*2);
+      offc.fillStyle='rgba(0,0,0,'+alpha+')';
+      offc.fill();
+    }
+    offc.globalCompositeOperation='source-in';
+    const ct=cover(top,w,h);
+    offc.drawImage(top,ct[0],ct[1],ct[2],ct[3]);
+    offc.globalCompositeOperation='source-atop';
+    offc.fillStyle=OVERLAY;
+    offc.fillRect(0,0,w,h);
+
+    ctx.drawImage(off,0,0,w,h);
+
+    if(trail.length){
+      const head=trail[0];
+      const glow=ctx.createRadialGradient(head.x,head.y,0,head.x,head.y,HEAD_RADIUS*1.45);
+      glow.addColorStop(0,'rgba(220,238,255,0.30)');
+      glow.addColorStop(0.45,'rgba(30,111,242,0.16)');
+      glow.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();
+      ctx.arc(head.x,head.y,HEAD_RADIUS*1.45,0,Math.PI*2);
+      ctx.fillStyle=glow; ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+
+  let loaded=0;
+  const onLoad=function(){ if(++loaded===2) draw(); };
+  bottom.onload=onLoad; top.onload=onLoad;
+})();
+</script>
+</body>
+</html>
